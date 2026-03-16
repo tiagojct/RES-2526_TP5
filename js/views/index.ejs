@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="panel">
+      <div class="panel-header simple">
+        <div>
+          <h1>Resultados</h1>
+          <label for="patient-search" class="muted" style="display:block; margin-top:8px;">Pesquisar doente</label>
+          <input
+            id="patient-search"
+            type="search"
+            placeholder="Pesquisar por nome, data de nascimento ou sexo"
+            aria-label="Pesquisar doente"
+            autocomplete="off"
+            style="margin-top:8px; min-width:280px; max-width:100%; padding:10px 12px; border-radius:10px; border:1px solid #d0d7de;"
+          />
+        </div>
+        <div class="count"><span id="patient-count"><%= patients.length %></span> doente(s)</div>
+      </div>
+
+      <table class="patient-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>DN</th>
+            <th>Sexo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="patients-table-body">
+          <% patients.forEach(function(patient){ %>
+            <tr class="patient-row" data-search="<%= `${patient.name} ${patient.birthDate} ${patient.gender}`.toLowerCase() %>">
+              <td class="strong"><%= patient.name %></td>
+              <td><%= patient.birthDate %></td>
+              <td><%= patient.gender %></td>
+              <td>
+                <a
+                  class="btn patient-open-link"
+                  data-patient-id="<%= patient.id %>"
+                  href="/patients/<%= patient.id %>"
+                >Abrir</a>
+              </td>
+            </tr>
+          <% }) %>
+          <tr id="no-results-row" style="display:none;">
+            <td colspan="4">Nenhum doente encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('patient-search');
+    const patientRows = Array.from(document.querySelectorAll('.patient-row'));
+    const patientCount = document.getElementById('patient-count');
+    const noResultsRow = document.getElementById('no-results-row');
+    const patientLinks = Array.from(document.querySelectorAll('.patient-open-link'));
+
+    function buildListUrl(query) {
+      const trimmedQuery = (query || '').trim();
+      const params = new URLSearchParams();
+
+      if (trimmedQuery) {
+        params.set('q', trimmedQuery);
+      }
+
+      const queryString = params.toString();
+      return queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+    }
+
+    function updatePatientLinks(query) {
+      const returnTo = buildListUrl(query);
+
+      patientLinks.forEach((link) => {
+        const patientId = link.dataset.patientId;
+        link.href = `/patients/${patientId}?returnTo=${encodeURIComponent(returnTo)}`;
+      });
+    }
+
+    function updateBrowserUrl(query) {
+      const nextUrl = buildListUrl(query);
+      window.history.replaceState({}, '', nextUrl);
+    }
+
+    function filterPatients() {
+      const query = (searchInput.value || '').trim().toLowerCase();
+      let visibleCount = 0;
+
+      patientRows.forEach((row) => {
+        const searchableText = row.dataset.search || '';
+        const matches = !query || searchableText.includes(query);
+        row.style.display = matches ? '' : 'none';
+
+        if (matches) {
+          visibleCount += 1;
+        }
+      });
+
+      patientCount.textContent = visibleCount;
+      noResultsRow.style.display = visibleCount ? 'none' : '';
+      updateBrowserUrl(searchInput.value || '');
+      updatePatientLinks(searchInput.value || '');
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q') || '';
+    if (initialQuery) {
+      searchInput.value = initialQuery;
+    }
+
+    filterPatients();
+    searchInput.addEventListener('input', filterPatients);
+  </script>
+</body>
+</html>

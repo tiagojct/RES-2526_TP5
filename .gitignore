@@ -1,0 +1,10 @@
+node_modules/
+js/node_modules/
+js/.env
+python/__pycache__/
+*.pyc
+venv/
+.env
+resumo_clinico_*.json
+resumo_clinico_*.md
+resumo_clinico_*.docx

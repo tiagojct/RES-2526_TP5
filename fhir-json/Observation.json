@@ -1,0 +1,23 @@
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2160-0",
+        "display": "Creatinina [Volume] no soro ou plasma"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/ID_DO_DOENTE"
+  },
+  "effectiveDateTime": "2024-04-20",
+  "valueQuantity": {
+    "value": 2.1,
+    "unit": "mg/dL",
+    "system": "http://unitsofmeasure.org",
+    "code": "mg/dL"
+  }
+}

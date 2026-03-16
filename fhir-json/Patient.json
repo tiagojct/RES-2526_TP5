@@ -1,0 +1,23 @@
+{
+  "resourceType": "Patient",
+  "identifier": [
+    {
+      "system": "http://hospital.pt/mrn"
+    }
+  ],
+  "name": [
+    {
+      "family": "Pereira",
+      "given": ["Rui"]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1960-05-15",
+  "address": [
+    {
+      "line": ["Rua das Flores 123"],
+      "city": "Lisboa",
+      "country": "Portugal"
+    }
+  ]
+}

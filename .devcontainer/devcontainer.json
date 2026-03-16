@@ -1,15 +1,13 @@
 {
-  "name": "Aula FHIR - Saúde Digital e Inovação Biomédica",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "name": "Aula FHIR - SDIB",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "lts"
-    },
     "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.12"
+      "version": "3.12",
+      "installTools": false
     }
   },
-  "postCreateCommand": "cd js && npm install && cd ../python && pip install -r ../requirements.txt",
+  "postCreateCommand": "cd js && cp -n .env.example .env && npm install && pip install -r ../requirements.txt",
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
@@ -20,12 +18,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python",
         "humao.rest-client"
-      ],
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
-      }
+      ]
     }
   }
 }
